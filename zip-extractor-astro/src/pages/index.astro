@@ -1,0 +1,43 @@
+---
+import '@/styles/globals.css'
+import { ZipExtractor } from '@/components/ZipExtractor/ZipExtractor'
+import { ModeToggle } from '@/components/ModeToggle'
+---
+
+<script is:inline>
+	const getThemePreference = () => {
+		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+			return localStorage.getItem('theme');
+		}
+		return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+	};
+	const isDark = getThemePreference() === 'dark';
+	document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+ 
+	if (typeof localStorage !== 'undefined') {
+		const observer = new MutationObserver(() => {
+			const isDark = document.documentElement.classList.contains('dark');
+			localStorage.setItem('theme', isDark ? 'dark' : 'light');
+		});
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+	}
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>ZIP File Extractor</title>
+	</head>
+	<body>
+		<main class="min-h-screen bg-background">
+			<div class="absolute top-4 right-4">
+				<ModeToggle client:load />
+			</div>
+			<ZipExtractor client:load />
+		</main>
+	</body>
+</html>
