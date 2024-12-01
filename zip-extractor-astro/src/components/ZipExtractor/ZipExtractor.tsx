@@ -3,14 +3,18 @@ import JSZip from 'jszip'
 import { Button } from '@/components/ui/button'
 import { DropZone } from './DropZone'
 import { FileList } from './FileList'
+import { TreeView } from './TreeView'
 import { PrefixInput } from './PrefixInput'
 import { FilePreviewModal } from './FilePreviewModal'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ListTree, List } from 'lucide-react'
 
 export function ZipExtractor() {
   const [files, setFiles] = useState<string[]>([])
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set())
   const [prefix, setPrefix] = useState('')
   const [zipInstance, setZipInstance] = useState<JSZip | null>(null)
+  const [viewMode, setViewMode] = useState<'list' | 'tree'>('list')
   const [previewFile, setPreviewFile] = useState<{
     name: string
     content: string | ArrayBuffer | null
@@ -112,13 +116,38 @@ export function ZipExtractor() {
       {files.length > 0 && (
         <>
           <PrefixInput value={prefix} onChange={setPrefix} />
-          <FileList
-            files={files}
-            selectedFiles={selectedFiles}
-            onFileSelect={toggleFileSelection}
-            onFileDownload={downloadFile}
-            onPreview={previewFileContent}
-          />
+          <Tabs
+            value={viewMode}
+            onValueChange={(value) => setViewMode(value as 'list' | 'tree')}
+            className="w-full"
+          >
+            <TabsList className="grid w-48 grid-cols-2 mx-auto mb-4">
+              <TabsTrigger value="list" className="flex items-center gap-2">
+                <List className="h-4 w-4" />
+                List
+              </TabsTrigger>
+              <TabsTrigger value="tree" className="flex items-center gap-2">
+                <ListTree className="h-4 w-4" />
+                Tree
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          {viewMode === 'list' ? (
+            <FileList
+              files={files}
+              selectedFiles={selectedFiles}
+              onFileSelect={toggleFileSelection}
+              onFileDownload={downloadFile}
+              onPreview={previewFileContent}
+            />
+          ) : (
+            <TreeView
+              files={files}
+              selectedFiles={selectedFiles}
+              onFileSelect={toggleFileSelection}
+              onPreview={previewFileContent}
+            />
+          )}
           {selectedFiles.size > 0 && (
             <Button onClick={downloadSelectedFiles}>
               Download Selected Files
