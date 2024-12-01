@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZIP File Extractor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #333;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .custom-file-upload {
+            border: 2px dashed #007bff;
+            display: inline-block;
+            padding: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            color: #007bff;
+            border-radius: 16px;
+        }
+        .custom-file-upload:hover {
+            background-color: #e9f5ff;
+            border-color: #0056b3;
+        }
+        .file-list {
+            max-width: 400px;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 16px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .file-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            transition: background-color 0.2s;
+        }
+        .file-list-item:hover {
+            background-color: #e0e0e0;
+        }
+        .selected {
+            background-color: #007bff;
+            color: white;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #c0c0c0;
+            cursor: not-allowed;
+        }
+        .download-icon {
+            margin-left: 10px;
+            cursor: pointer;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+        .download-icon:hover {
+            color: #0056b3;
+        }
+        #prefixContainer {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 16px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        #filenamePrefix {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+        }
+        #filenamePrefix:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ZIP File Extractor</h1>
+        <label for="zipFileInput" class="custom-file-upload" id="dropZone">Drop or Click to Upload ZIP File</label>
+        <input type="file" id="zipFileInput" accept="*/*">
+        <div id="prefixContainer">
+            <label for="filenamePrefix">Filename Prefix: </label>
+            <input type="text" id="filenamePrefix" />
+        </div>
+        <div id="fileList" class="file-list" style="display: none;">
+            <h3>Files in ZIP:</h3>
+            <div id="fileItems"></div>
+        </div>
+        <button id="downloadButton" style="display: none;">Download Selected Files</button>
+    </div>
+
+    <script>
+        const zipFileInput = document.getElementById("zipFileInput");
+        const dropZone = document.getElementById("dropZone");
+        const fileList = document.getElementById("fileList");
+        const fileItems = document.getElementById("fileItems");
+        const downloadButton = document.getElementById("downloadButton");
+        const prefixContainer = document.getElementById("prefixContainer");
+        const filenamePrefixInput = document.getElementById("filenamePrefix");
+        let selectedFiles = new Set();
+        let zipInstance = null;
+        let zipFileName = "";
+
+        // Handle ZIP file input
+        zipFileInput.addEventListener("change", async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                zipFileName = file.name.replace(/\.zip$/, "") + "_";
+                filenamePrefixInput.value = zipFileName;
+                zipInstance = new JSZip();
+                try {
+                    const zipData = await zipInstance.loadAsync(file);
+                    prefixContainer.style.display = "block";
+                    displayFileList(zipData.files);
+                } catch (e) {
+                    alert("The file could not be loaded as a ZIP file.");
+                }
+            }
+        });
+
+        // Handle drag and drop
+        dropZone.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            dropZone.style.backgroundColor = "#e9f5ff";
+        });
+
+        dropZone.addEventListener("dragleave", (event) => {
+            event.preventDefault();
+            dropZone.style.backgroundColor = "";
+        });
+
+        dropZone.addEventListener("drop", async (event) => {
+            event.preventDefault();
+            dropZone.style.backgroundColor = "";
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                zipFileName = file.name.replace(/\.zip$/, "") + "_";
+                filenamePrefixInput.value = zipFileName;
+                zipInstance = new JSZip();
+                try {
+                    const zipData = await zipInstance.loadAsync(file);
+                    prefixContainer.style.display = "block";
+                    displayFileList(zipData.files);
+                } catch (e) {
+                    alert("The file could not be loaded as a ZIP file.");
+                }
+            }
+        });
+
+        // Display files in the ZIP
+        function displayFileList(files) {
+            fileItems.innerHTML = "";
+            fileList.style.display = "block";
+            downloadButton.style.display = "none";
+            selectedFiles.clear();
+
+            for (const fileName in files) {
+                if (files[fileName].dir) continue; // Skip directories
+                const fileDiv = document.createElement("div");
+                fileDiv.classList.add("file-list-item");
+                fileDiv.textContent = fileName;
+
+                const downloadIcon = document.createElement("span");
+                downloadIcon.classList.add("download-icon");
+                downloadIcon.innerHTML = "&#128190;"; // Unicode for a floppy disk icon
+                downloadIcon.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    downloadSingleFile(fileName);
+                });
+
+                fileDiv.appendChild(downloadIcon);
+                fileDiv.addEventListener("click", () => selectFile(fileDiv, fileName));
+                fileItems.appendChild(fileDiv);
+            }
+        }
+
+        // Handle file selection
+        function selectFile(fileDiv, fileName) {
+            if (fileDiv.classList.contains('selected')) {
+                fileDiv.classList.remove('selected');
+                selectedFiles.delete(fileName);
+            } else {
+                fileDiv.classList.add('selected');
+                selectedFiles.add(fileName);
+            }
+            downloadButton.style.display = selectedFiles.size > 0 ? "inline-block" : "none";
+        }
+
+        // Handle download of selected files
+        downloadButton.addEventListener("click", async () => {
+            if (selectedFiles.size > 0 && zipInstance) {
+                for (const fileName of selectedFiles) {
+                    await downloadSingleFile(fileName);
+                }
+            }
+        });
+
+        // Download a single file from the ZIP
+        async function downloadSingleFile(fileName) {
+            if (zipInstance && fileName) {
+                const fileData = await zipInstance.file(fileName).async("blob");
+                const downloadLink = document.createElement("a");
+                downloadLink.href = URL.createObjectURL(fileData);
+                const prefix = filenamePrefixInput.value.trim();
+                downloadLink.download = prefix ? `${prefix}${fileName}` : fileName;
+                downloadLink.click();
+            }
+        }
+    </script>
+
+</body>
+</html>
