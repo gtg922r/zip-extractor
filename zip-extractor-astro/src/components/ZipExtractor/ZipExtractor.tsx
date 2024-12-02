@@ -4,10 +4,7 @@ import { Button } from '@/components/ui/button'
 import { DropZone } from './DropZone'
 import { FileList } from './FileList'
 import { TreeView } from './TreeView'
-import { PrefixInput } from './PrefixInput'
 import { FilePreviewModal } from './FilePreviewModal'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ListTree, List } from 'lucide-react'
 
 export function ZipExtractor() {
   const [files, setFiles] = useState<string[]>([])
@@ -15,6 +12,7 @@ export function ZipExtractor() {
   const [prefix, setPrefix] = useState('')
   const [zipInstance, setZipInstance] = useState<JSZip | null>(null)
   const [viewMode, setViewMode] = useState<'list' | 'tree'>('list')
+  const [zipFileName, setZipFileName] = useState('')
   const [previewFile, setPreviewFile] = useState<{
     name: string
     content: string | ArrayBuffer | null
@@ -31,6 +29,7 @@ export function ZipExtractor() {
       setFiles(fileNames)
       setSelectedFiles(new Set())
       setZipInstance(zip)
+      setZipFileName(file.name)
       setPrefix(file.name.replace(/\.zip$/, '') + '_')
     } catch (e) {
       alert('The file could not be loaded as a ZIP file.')
@@ -115,23 +114,6 @@ export function ZipExtractor() {
       <DropZone onFileSelect={handleFileSelect} />
       {files.length > 0 && (
         <>
-          <PrefixInput value={prefix} onChange={setPrefix} />
-          <Tabs
-            value={viewMode}
-            onValueChange={(value) => setViewMode(value as 'list' | 'tree')}
-            className="w-full"
-          >
-            <TabsList className="grid w-48 grid-cols-2 mx-auto mb-4">
-              <TabsTrigger value="list" className="flex items-center gap-2">
-                <List className="h-4 w-4" />
-                List
-              </TabsTrigger>
-              <TabsTrigger value="tree" className="flex items-center gap-2">
-                <ListTree className="h-4 w-4" />
-                Tree
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
           {viewMode === 'list' ? (
             <FileList
               files={files}
@@ -139,6 +121,11 @@ export function ZipExtractor() {
               onFileSelect={toggleFileSelection}
               onFileDownload={downloadFile}
               onPreview={previewFileContent}
+              viewMode={viewMode}
+              onViewModeChange={(value) => setViewMode(value)}
+              prefix={prefix}
+              onPrefixChange={setPrefix}
+              zipFileName={zipFileName}
             />
           ) : (
             <TreeView
@@ -146,6 +133,11 @@ export function ZipExtractor() {
               selectedFiles={selectedFiles}
               onFileSelect={toggleFileSelection}
               onPreview={previewFileContent}
+              viewMode={viewMode}
+              onViewModeChange={(value) => setViewMode(value)}
+              prefix={prefix}
+              onPrefixChange={setPrefix}
+              zipFileName={zipFileName}
             />
           )}
           {selectedFiles.size > 0 && (

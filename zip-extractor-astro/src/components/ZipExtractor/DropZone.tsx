@@ -44,7 +44,7 @@ export function DropZone({ onFileSelect }: DropZoneProps) {
   }, [onFileSelect])
 
   return (
-    <Card className="w-full max-w-md p-8">
+    <Card className="w-full max-w-2xl p-8">
       <div
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
