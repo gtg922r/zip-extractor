@@ -62,7 +62,6 @@ export function DropZone({ onFileSelect }: DropZoneProps) {
           id="fileInput"
           className="hidden"
           onChange={handleFileInput}
-          accept=".zip"
         />
         <Upload className={`mx-auto h-12 w-12 transition-colors duration-200 ${
           isDragging ? 'text-primary' : 'text-muted-foreground'
