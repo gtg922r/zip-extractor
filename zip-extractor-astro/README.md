@@ -1,48 +1,94 @@
-# Astro Starter Kit: Basics
+# ZIP Extractor
+
+<div align="center">
+  <img src="/doc/zip-extractor.png" alt="ZIP Extractor Logo" width="200"/>
+  <p><strong>A modern, browser-based ZIP file extraction tool</strong></p>
+  <p>
+    <a href="https://gtg922r.github.io/zip-extractor/">View Demo</a>
+    ·
+    <a href="https://github.com/gtg922r/zip-extractor/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/gtg922r/zip-extractor/issues">Request Feature</a>
+  </p>
+</div>
+
+## About The Project
+
+ZIP Extractor is a modern web application that allows users to extract and preview ZIP file contents directly in their browser. Built with Astro and React, it provides a seamless, fast, and secure way to handle ZIP files without requiring any server-side processing. ZIP Extractor works for any zip-compressed file, regardless of file type.
+
+### Key Features
+
+- 🚀 **Client-side Processing** - All file processing happens in your browser
+- 🔍 **File Preview** - Preview images and JSON files before extraction
+- 🌙 **Dark Mode** - Elegant dark mode support for comfortable viewing
+- 📁 **Prefix Support** - Add custom prefixes to extracted files
+- 💻 **Cross-Platform** - Works on any modern browser
+- 🛡️ **Secure** - No file uploads, everything stays on your device
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 16 or higher)
+- npm
+
+### Installation
+
+1. Clone the repository
+   ```sh
+   git clone https://github.com/gtg922r/zip-extractor.git
+   ```
+
+2. Navigate to the project directory
+   ```sh
+   cd zip-extractor/zip-extractor-astro
+   ```
+
+3. Install dependencies
+   ```sh
+   npm install
+   ```
+
+4. Start the development server
+   ```sh
+   npm run dev
+   ```
+
+### Building for Production
 
 ```sh
-npm create astro@latest -- --template basics
+npm run build
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+To preview the production build:
+```sh
+npm run preview
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Technology Stack
 
-## 🧞 Commands
+- [Astro](https://astro.build/) - Web Framework
+- [React](https://reactjs.org/) - UI Components
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [shadcn/ui](https://ui.shadcn.com/) - UI Components
+- [JSZip](https://stuk.github.io/jszip/) - ZIP File Processing
 
-All commands are run from the root of the project, from a terminal:
+## Contributing
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-## 👀 Want to learn more?
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Contact
+
+Your Name - [@your_twitter](https://twitter.com/your_twitter)
+
+Project Link: [https://github.com/gtg922r/zip-extractor](https://github.com/gtg922r/zip-extractor)
