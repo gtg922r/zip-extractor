@@ -2,6 +2,7 @@
 import '@/styles/globals.css'
 import { ZipExtractor } from '@/components/ZipExtractor/ZipExtractor'
 import { ModeToggle } from '@/components/ModeToggle'
+import { GitHubLink } from '@/components/GitHubLink'
 ---
 
 <script is:inline>
@@ -34,8 +35,9 @@ import { ModeToggle } from '@/components/ModeToggle'
 	</head>
 	<body>
 		<main class="min-h-screen bg-background">
-			<div class="absolute top-4 right-4">
+			<div class="absolute top-4 right-4 flex items-center space-x-2">
 				<ModeToggle client:load />
+				<GitHubLink repo="gtg922r/zip-extractor" client:load />
 			</div>
 			<ZipExtractor client:load />
 		</main>
