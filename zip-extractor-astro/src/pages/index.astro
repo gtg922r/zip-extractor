@@ -29,6 +29,18 @@ import { GitHubLink } from '@/components/GitHubLink'
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/x-icon" href="/zip-extractor/favicon.ico" />
+		<link 
+			rel="apple-touch-icon" 
+			href="/zip-extractor/apple-touch-icon-dark.png" 
+			media="(prefers-color-scheme: dark)" 
+		/>		
+		<link 
+			rel="apple-touch-icon" 
+			href="/zip-extractor/apple-touch-icon-light.png" 
+			media="(prefers-color-scheme: light)" 
+		/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>ZIP Extractor</title>
