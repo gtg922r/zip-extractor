@@ -109,8 +109,13 @@ export function ZipExtractor() {
   }, [zipInstance, selectedFiles, downloadFile])
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4 min-h-screen bg-background text-foreground">
-      <h1 className="text-3xl font-bold mb-8">ZIP File Extractor</h1>
+    <div className="flex flex-col items-center gap-4 p-4 min-h-screen bg-background text-foreground"> 
+      <div className="w-full max-w-2xl mt-2">
+        <div className="flex items-center">
+          <img src="/zip-extractor/zip-extractor.png" alt="ZIP Extractor Logo" className="h-4 w-4" />
+          <h1 className="text-xl font-bold">IP Extractor</h1>
+        </div>
+      </div>
       <DropZone onFileSelect={handleFileSelect} />
       {files.length > 0 && (
         <>
